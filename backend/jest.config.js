@@ -34,6 +34,9 @@ export default {
   // Global setup to initialize database schema
   globalSetup: "<rootDir>/jest.setup.js",
 
+  // Run tests serially to avoid database race conditions
+  maxWorkers: 1,
+
   // Verbose output (shows each test result)
   verbose: true,
 };
