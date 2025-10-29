@@ -31,6 +31,9 @@ export default {
   // Setup file to run before tests (we'll create this)
   setupFilesAfterEnv: ["<rootDir>/src/__tests__/setup.js"],
 
+  // Global setup to initialize database schema
+  globalSetup: "<rootDir>/jest.setup.js",
+
   // Verbose output (shows each test result)
   verbose: true,
 };
