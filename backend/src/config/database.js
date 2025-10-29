@@ -1,6 +1,11 @@
 import dotenv from "dotenv";
-dotenv.config();
 import { Pool } from "pg";
+
+if (process.env.NODE_ENV === "test") {
+  dotenv.config({ path: ".env.test" });
+} else {
+  dotenv.config();
+}
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -10,9 +15,11 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-pool.on("connect", () => {
-  console.log("Connected to PostgreSQL database");
-});
+if (process.env.NODE_ENV !== "test") {
+  pool.on("connect", () => {
+    console.log("Connected to PostgreSQL database");
+  });
+}
 
 pool.on("error", (err) => {
   console.error("Unexpected error on idle client:", err);

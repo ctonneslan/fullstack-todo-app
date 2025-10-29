@@ -16,6 +16,20 @@ function createApp(pool) {
 
   // Middleware
   app.use(cors());
+
+  // Content-Type validation for POST/PUT/PATCH requests (except toggle endpoint which has no body)
+  app.use((req, res, next) => {
+    if (['POST', 'PUT', 'PATCH'].includes(req.method) && !req.url.includes('/toggle')) {
+      const contentType = req.get('Content-Type');
+      if (!contentType || !contentType.includes('application/json')) {
+        return res.status(400).json({
+          error: 'Content-Type must be application/json'
+        });
+      }
+    }
+    next();
+  });
+
   app.use(express.json());
 
   // Dependency Injections
@@ -44,6 +58,15 @@ function createApp(pool) {
   // Global error handler
   app.use((err, req, res, next) => {
     console.error("Unhandled error:", err);
+
+    // Handle JSON parsing errors
+    if (err.type === 'entity.parse.failed') {
+      return res.status(400).json({
+        error: "Invalid JSON",
+        message: process.env.NODE_ENV === "development" ? err.message : undefined,
+      });
+    }
+
     res.status(500).json({
       error: "Internal server error",
       message: process.env.NODE_ENV === "development" ? err.message : undefined,

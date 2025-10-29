@@ -1,0 +1,80 @@
+# GitHub Actions Workflow
+# Runs tests automatically on every push and pull request
+
+name: Run Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # Service containers for PostgreSQL
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: todo_app_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+
+      # Install dependencies
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      # Run tests
+      - name: Run tests
+        working-directory: ./backend
+        env:
+          DB_USER: postgres
+          DB_HOST: localhost
+          DB_NAME: todo_app_test
+          DB_PASSWORD: postgres
+          DB_PORT: 5432
+          NODE_ENV: test
+        run: npm test
+
+      # Generate and upload coverage
+      - name: Generate coverage report
+        working-directory: ./backend
+        env:
+          DB_USER: postgres
+          DB_HOST: localhost
+          DB_NAME: todo_app_test
+          DB_PASSWORD: postgres
+          DB_PORT: 5432
+          NODE_ENV: test
+        run: npm run test:coverage
+
+      # Optional: Upload coverage to Codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./backend/coverage/lcov.info
+          flags: backend
+          name: backend-coverage

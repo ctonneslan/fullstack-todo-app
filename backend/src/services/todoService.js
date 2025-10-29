@@ -24,7 +24,7 @@ class TodoService {
   async getTodoById(id) {
     const todoId = parseInt(id);
     if (isNaN(todoId) || todoId < 1) {
-      throw new Error("Invalid todo Id");
+      throw new Error("Invalid todo ID");
     }
 
     const todo = await this.todoRepository.findById(todoId);
@@ -44,6 +44,11 @@ class TodoService {
    * @throws {Error} If validation fails
    */
   async createTodo(title, description) {
+    // Validate data types
+    if (typeof title !== 'string' && title !== null && title !== undefined) {
+      throw new Error("Title must be a string");
+    }
+
     if (!title || title.trim().length === 0) {
       throw new Error("Title is required and cannot be empty");
     }

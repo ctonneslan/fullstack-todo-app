@@ -41,7 +41,7 @@ class TodoController {
       console.error("Error in getTodoById:", error.message);
       if (
         error.message === "Todo not found" ||
-        error.message === "Invalid todo Id"
+        error.message === "Invalid todo ID"
       ) {
         return res.status(404).json({ error: error.message });
       }
@@ -63,7 +63,8 @@ class TodoController {
 
       if (
         error.message.includes("required") ||
-        error.message.includes("cannot")
+        error.message.includes("cannot") ||
+        error.message.includes("must be")
       ) {
         return res.status(400).json({ error: error.message });
       }
@@ -94,7 +95,8 @@ class TodoController {
 
       if (
         error.message.includes("required") ||
-        error.message.includes("cannot")
+        error.message.includes("cannot") ||
+        error.message.includes("must be")
       ) {
         return res.status(400).json({ error: error.message });
       }
