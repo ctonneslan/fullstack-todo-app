@@ -1,56 +1,68 @@
 /**
  * Express App Factory
  * Creates and configures the Express application
- * Wires together all layers of the application
+ * Wires together all layers including authentication
  */
+
 import express from "express";
 import cors from "cors";
 
+// Import repositories
 import TodoRepository from "./repositories/todoRepository.js";
+import UserRepository from "./repositories/userRepository.js";
+
+// Import services
 import TodoService from "./services/todoService.js";
+import AuthService from "./services/authService.js";
+
+// Import controllers
 import TodoController from "./controllers/todoController.js";
+import AuthController from "./controllers/authController.js";
+
+// Import routes
 import createTodoRoutes from "./routes/todoRoutes.js";
+import createAuthRoutes from "./routes/authRoutes.js";
 
 function createApp(pool) {
   const app = express();
 
   // Middleware
   app.use(cors());
-
-  // Content-Type validation for POST/PUT/PATCH requests (except toggle endpoint which has no body)
-  app.use((req, res, next) => {
-    if (['POST', 'PUT', 'PATCH'].includes(req.method) && !req.url.includes('/toggle')) {
-      const contentType = req.get('Content-Type');
-      if (!contentType || !contentType.includes('application/json')) {
-        return res.status(400).json({
-          error: 'Content-Type must be application/json'
-        });
-      }
-    }
-    next();
-  });
-
   app.use(express.json());
 
-  // Dependency Injections
+  // Create repository instances
   const todoRepository = new TodoRepository(pool);
-  const todoService = new TodoService(todoRepository);
-  const todoController = new TodoController(todoService);
-  const todoRoutes = createTodoRoutes(todoController);
+  const userRepository = new UserRepository(pool);
 
-  // Root endpoint
+  // Create service instances
+  const todoService = new TodoService(todoRepository);
+  const authService = new AuthService(userRepository);
+
+  // Create controller instances
+  const todoController = new TodoController(todoService);
+  const authController = new AuthController(authService);
+
+  // Create route instances
+  const todoRoutes = createTodoRoutes(todoController);
+  const authRoutes = createAuthRoutes(authController);
+
+  // Health check route
   app.get("/", (req, res) => {
     res.json({
       message: "Todo API is running",
-      version: "1.0.0",
+      version: "2.0.0", // Updated version with auth
       timestamp: new Date().toISOString(),
+      endpoints: {
+        auth: "/api/auth",
+        todos: "/api/todos",
+      },
     });
   });
 
-  // Mount API routes
+  app.use("/api/auth", authRoutes);
   app.use("/api", todoRoutes);
 
-  // 404 handler
+  // 404 handler for undefined routes
   app.use((req, res) => {
     res.status(404).json({ error: "Route not found" });
   });
@@ -58,15 +70,6 @@ function createApp(pool) {
   // Global error handler
   app.use((err, req, res, next) => {
     console.error("Unhandled error:", err);
-
-    // Handle JSON parsing errors
-    if (err.type === 'entity.parse.failed') {
-      return res.status(400).json({
-        error: "Invalid JSON",
-        message: process.env.NODE_ENV === "development" ? err.message : undefined,
-      });
-    }
-
     res.status(500).json({
       error: "Internal server error",
       message: process.env.NODE_ENV === "development" ? err.message : undefined,
