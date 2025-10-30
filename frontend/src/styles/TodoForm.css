@@ -1,73 +1,87 @@
-/**
- * TodoForm Component Styles
- */
+/* TodoForm - Clean & Simple */
 
 .todo-form {
-  background: var(--color-background);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
-  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 1.25rem;
 }
 
 .form-group {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 1rem;
 }
 
 .form-label {
   display: block;
   font-weight: 500;
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 0.5rem;
   font-size: 0.875rem;
 }
 
 .form-input,
 .form-textarea {
   width: 100%;
-  padding: var(--spacing-md);
-  border: 2px solid var(--color-border);
+  padding: 0.75rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: 1rem;
-  transition: all var(--transition-fast);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition);
   font-family: inherit;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-text-disabled);
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .form-input:disabled,
 .form-textarea:disabled {
-  background-color: var(--color-surface);
+  opacity: 0.5;
   cursor: not-allowed;
-  opacity: 0.6;
 }
 
 .form-textarea {
   resize: vertical;
   min-height: 100px;
+  line-height: 1.5;
 }
 
 .btn-block {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-block:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
 }
 
 .btn-block:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }

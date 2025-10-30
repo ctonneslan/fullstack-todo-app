@@ -1,44 +1,39 @@
-/**
- * TodoItem Component Styles
- */
+/* TodoItem - Clean & Simple */
 
 .todo-item {
   background: var(--color-background);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  transition: all var(--transition-base);
+  transition: all var(--transition);
 }
 
 .todo-item:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary-light);
+  border-color: var(--color-primary);
 }
 
 .todo-item.completed {
   opacity: 0.6;
-  background-color: var(--color-surface);
 }
 
 .todo-item.editing {
   flex-direction: column;
-  padding: var(--spacing-lg);
+  padding: 1.25rem;
 }
 
 /* Content Layout */
 .todo-content {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-md);
+  gap: 0.75rem;
   flex: 1;
 }
 
 .todo-checkbox {
-  margin-top: 0.25rem;
+  margin-top: 0.125rem;
 }
 
 .todo-checkbox input[type="checkbox"] {
@@ -53,10 +48,10 @@
 }
 
 .todo-title {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: 0.25rem;
 }
 
 .todo-item.completed .todo-title {
@@ -67,7 +62,7 @@
 .todo-description {
   color: var(--color-text-secondary);
   font-size: 0.875rem;
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: 0.25rem;
   line-height: 1.5;
 }
 
@@ -79,72 +74,85 @@
 /* Actions */
 .todo-actions {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
 }
 
 /* Buttons */
 .btn {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
   font-weight: 500;
-  transition: all var(--transition-fast);
+  transition: all var(--transition);
   font-size: 0.875rem;
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
+  background: var(--color-primary);
   color: white;
+  border: none;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-dark);
+  background: var(--color-primary-dark);
 }
 
 .btn-secondary {
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
+  background: transparent;
+  color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-border);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .btn-icon {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-md);
-  background-color: var(--color-surface);
-  font-size: 1.25rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  transition: all var(--transition);
 }
 
 .btn-icon:hover {
-  background-color: var(--color-border);
-  transform: scale(1.05);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .btn-danger:hover {
-  background-color: var(--color-danger);
+  background: var(--color-danger);
+  border-color: var(--color-danger);
   color: white;
 }
 
 /* Edit Form */
 .form-group {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 0.75rem;
 }
 
 .edit-input,
 .edit-textarea {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 2px solid var(--color-border);
+  padding: 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: 1rem;
-  transition: border-color var(--transition-fast);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition);
+}
+
+.edit-input::placeholder,
+.edit-textarea::placeholder {
+  color: var(--color-text-disabled);
 }
 
 .edit-input:focus,
@@ -156,10 +164,12 @@
 .edit-textarea {
   resize: vertical;
   font-family: inherit;
+  min-height: 80px;
+  line-height: 1.5;
 }
 
 .edit-actions {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
   justify-content: flex-end;
 }

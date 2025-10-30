@@ -36,6 +36,8 @@ services:
       DB_NAME: todo_app
       DB_PASSWORD: postgres
       DB_PORT: 5432
+      JWT_SECRET: 9af6f6fbafcd2b496195399dbc614489b30a6a7f7a97d2ddd07cb19059b5c875
+      JWT_EXPIRES_IN: 7d
     ports:
       - "3000:3000"
     volumes:
