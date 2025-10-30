@@ -20,6 +20,13 @@ apiClient.interceptors.request.use(
     console.log(
       `Making ${config.method.toUpperCase()} request to ${config.url}`
     );
+
+    // Add auth token to headers if it exists
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   error => {
